@@ -1,0 +1,60 @@
+<style>
+    form {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+<script>
+    function searchPhones() {
+        var formData = new FormData(document.getElementById('advanced-search-form'));
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', "{% url 'phone_search_results' %}?" + new URLSearchParams(formData).toString(), true);
+        //console.log(new URLSearchParams(formData).toString());
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                document.getElementById('search-results').innerHTML = xhr.responseText;
+                document.getElementById('search-results').style.opacity = "0";
+                setTimeout(function() {
+                    document.getElementById('search-results').style.opacity = "1";
+                }, 100);
+            }
+        };
+        xhr.send();
+    }
+</script>
+<form method="get" id="advanced-search-form" onsubmit="searchPhones(); return false;">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+<div id="search-results"></div>

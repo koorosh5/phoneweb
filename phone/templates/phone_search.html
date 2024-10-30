@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phone Search</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #phone_search_results {
+            background-color: #e6e6e6;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        function searchPhones() {
+            var searchQuery = document.getElementById('search_query').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{% url 'phone_search_results' %}?search_query=" + searchQuery, true);
+
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.getElementById('phone_search_results').innerHTML = xhr.responseText;
+                    document.getElementById('phone_search_results').style.opacity = "0";
+                    setTimeout(function() {
+                        document.getElementById('phone_search_results').style.opacity = "1";
+                    }, 100);
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h1>Phone Search</h1>
+    <input type="text" id="search_query">
+    <button onclick="searchPhones()">Search</button>
+    <div id="phone_search_results"></div>
+</body>
+</html>
+
